@@ -22,6 +22,8 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
 , _alternatingColumnColor( FL_WHITE )
 , _alternatingRowColor( FL_WHITE )
 , _hideVScrollbar( false )
+, _scrollCallback( NULL )
+, _pScrollUserData( NULL )
 {
     // box( FL_FLAT_BOX );
     // color( fl_lighter( FL_LIGHT2 ) );
@@ -33,10 +35,11 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
     row_header_color( FL_LIGHT1 | FL_GRAY );
     col_header_color( FL_LIGHT1 | FL_GRAY );
     callback( &event_callback, (void*) this );
-    //when( FL_WHEN_NOT_CHANGED | when( ) );
-    when( FL_WHEN_NOT_CHANGED | FL_WHEN_RELEASE_ALWAYS | FL_WHEN_RELEASE );
+    when( FL_WHEN_NOT_CHANGED |  when( ) );
     end( );
     set_selection( 0, 0, 0, 0 );
+    
+    vscrollbar->callback( onScrollStatic, this );
 }
 
 void SimpleTable::setTableData( my::TableData *pDataTable ) {
@@ -69,6 +72,11 @@ int SimpleTable::handle( int evt ) {
         case FL_DRAG:
             if( !_enableDragging ) {
                 return 1;
+            } else {
+                int r1, c1, r2, c2;
+                get_selection( r1, c1, r2, c2 );
+                fprintf( stderr, "DRAGGING - selection = %d, %d, %d, %d\n",
+                         r1, c1, r2, c2 );
             }
             break;
         default:
@@ -175,6 +183,7 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
 void SimpleTable::event_callback2( ) {
     int R = callback_row( );
     int C = callback_col( );
+    fprintf( stderr, "SimpleTable::event_callback2: R = %d, C = %d\n", R, C );
     TableContext context = callback_context( );
     //adjustSelection( context, R, C );
 //    switch( context ) {
@@ -229,6 +238,19 @@ void SimpleTable::adjustSelection( TableContext context, int r, int c ) {
             break;
         default:
             break;
+    }
+}
+
+void SimpleTable::onScrollStatic( Fl_Widget *w, void *u ) {
+    Fl_Table::scroll_cb( w, u );
+    ((SimpleTable*)u)->onScroll( (Fl_Scrollbar*)w );
+}
+
+void SimpleTable::onScroll( Fl_Scrollbar *pScroll ) {
+    if( _scrollCallback ) {
+        char c = ( pScroll == vscrollbar ) ? FL_VERTICAL : FL_HORIZONTAL;
+        int val = pScroll->value();
+        (*_scrollCallback)( c, val, _pScrollUserData );
     }
 }
 
@@ -291,4 +313,18 @@ void SimpleTable::hideVScrollbar( bool hide ) {
     table_resized();
     
     parent()->redraw();
+}
+
+void SimpleTable::setScrollCallback( ScrollCallback cb, void *userData ) {
+    _scrollCallback = cb;
+    _pScrollUserData = userData;
+}
+
+void SimpleTable::setScrollValue( char orientation, int newValue ) {
+    if( orientation == FL_VERTICAL ) {
+        vscrollbar->value( newValue );
+    } else {
+        hscrollbar->value( newValue );
+    }
+    table_scrolled();
 }

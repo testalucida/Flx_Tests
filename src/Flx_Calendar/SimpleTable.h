@@ -23,6 +23,8 @@ enum SelectionMode {
     SELECTIONMODE_CELL_MULTI
 };
 
+typedef void (*ScrollCallback) (char orientiation, int scrollvalue, void * );
+
 class SimpleTable : public Fl_Table_Row {
 public:
     SimpleTable( int X, int Y, int W, int H, const char* L = 0 );
@@ -41,16 +43,20 @@ public:
     int getAllColumnsWidth();
     bool isVScrollbarVisible() const;
     void hideVScrollbar( bool hide );
+    void setScrollCallback( ScrollCallback, void * );
+    void setScrollValue( char orientation, int newValue );
+    static void event_callback( Fl_Widget*, void *v ) { // table's event callback (static)
+        ( (SimpleTable*) v )->event_callback2( );
+    }
     virtual ~SimpleTable() {};
 protected:
     virtual void draw_cell( TableContext context, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0 );
     void event_callback2( ); // table's event callback (instance)
-    static void event_callback( Fl_Widget*, void *v ) { // table's event callback (static)
-    ( (SimpleTable*) v )->event_callback2( );
-    }
+   
 private:
     void adjustSelection( TableContext, int, int );
-    
+    static void onScrollStatic( Fl_Widget *, void * );
+    void onScroll( Fl_Scrollbar * );
 private:
     my::TableData *_pData;
     Fl_Fontsize _headerFontsize;
@@ -65,6 +71,8 @@ private:
     Fl_Color _alternatingColumnColor;
     Fl_Color _alternatingRowColor;
     bool _hideVScrollbar;
+    ScrollCallback _scrollCallback;
+    void *_pScrollUserData;
 };
 
 #endif /* FLX_SPREADSHEET_H */

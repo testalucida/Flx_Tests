@@ -10,6 +10,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Printer.H>
 #include <FL/Fl_Browser.H>
+#include <FL/Fl_Table.H>
 
 #include <Flx_Calendar/Flx_Calendar.h>
 #include <Flx_Calendar/SimpleTable.h>
@@ -85,6 +86,29 @@ void onSimpleTableTest( Fl_Widget *pBtn, void * ) {
 
 }
 
+void onRightTableScroll( char c, int scrollVal, void *pUserData ) {
+    fprintf( stderr, "scrollVal: %d\n", scrollVal );
+    SimpleTable *pLeftTable = ((SimpleTable*)pUserData);
+    pLeftTable->setScrollValue( c, scrollVal );
+    pLeftTable->redraw();
+}
+
+void onTableSelection( Fl_Widget *pW, void *pUserData ) {
+    SimpleTable *pTrigger = ((SimpleTable*)pW);
+    SimpleTable::event_callback( pW, pUserData );
+    
+    Fl_Table::TableContext ctxt = pTrigger->callback_context();
+    SimpleTable *pOther = ((SimpleTable*)pUserData);
+    
+    if( ctxt == Fl_Table::CONTEXT_ROW_HEADER ) {
+        int r1, c1, r2, c2;
+        pTrigger->get_selection( r1, c1, r2, c2 );
+        pOther->set_selection( r1, 0, r2, pOther->cols() - 1 );
+    } else {
+        pOther->set_selection( -1, -1, -1, -1 );
+    }
+}
+
 void onFrozenTable( Fl_Widget *pBtn, void * ) {
     Fl_Double_Window *pWin = new Fl_Double_Window( 100, 100, 500, 500, "2 SimpleTables" );
    
@@ -129,14 +153,16 @@ void onFrozenTable( Fl_Widget *pBtn, void * ) {
     pRight->hideColumn( "Spalte 0" );
     pRight->hideColumn( "Spalte 3" );
     pRight->setAlternatingRowColor();
+    pRight->setScrollCallback( onRightTableScroll, pLeft );
+    
+    pLeft->callback( onTableSelection, pRight );
+    pRight->callback( onTableSelection, pLeft );
     
     pLeft->hideVScrollbar( true );
     
     pWin->end();
     
     pWin->show();
-    
-    
 
 }
 
