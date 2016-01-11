@@ -34,6 +34,9 @@ public:
     void enableDragging( bool enable ) { _enableDragging = enable;}
     virtual bool canSelectCell ( int r, int c ) { return true; }
     virtual Fl_Color getCellBackground( int row, int col, bool isSelected ) const;
+    int getModelIndex( int viewIndex ) const;
+    void setAlternatingColumnColor( Fl_Color color = fl_lighter( fl_rgb_color( 242, 234, 255 ) ) );    
+    void setAlternatingRowColor( Fl_Color color = fl_lighter( fl_rgb_color( 242, 234, 255 ) ) );
     virtual ~SimpleTable() {};
 protected:
     virtual void draw_cell( TableContext context, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0 );
@@ -43,13 +46,20 @@ protected:
     }
 private:
     void adjustSelection( TableContext, int, int );
+    
 private:
     my::TableData *_pData;
     Fl_Fontsize _headerFontsize;
     Fl_Fontsize _cellFontsize;
-    std::vector<IndexRel> _hiddenColumns;
+    std::vector<IndexRel> _indexRelations;
+    std::vector<IndexRel> _tmp;
     SelectionMode _selMode;
     bool _enableDragging;
+    bool _isAlternatingColumnColor;
+    bool _isAlternatingRowColor;       
+    Fl_Color _backgroundColor;
+    Fl_Color _alternatingColumnColor;
+    Fl_Color _alternatingRowColor;
 };
 
 #endif /* FLX_SPREADSHEET_H */

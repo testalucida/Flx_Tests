@@ -4,6 +4,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Window.H>
 #include <FL/Fl_Multiline_Input.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Button.H>
@@ -11,9 +12,10 @@
 #include <FL/Fl_Browser.H>
 
 #include <Flx_Calendar/Flx_Calendar.h>
+#include <Flx_Calendar/SimpleTable.h>
 
 #include <my/TableData.h>
-//#include <flx/Flx_Calendar.h>
+#include <my/CharBuffer.h>
 #include <my/datetime.h>
 
 using namespace my;
@@ -49,6 +51,38 @@ void onOpenCalendar( Fl_Widget *pBtn, void *pWin ) {
     delete pCal;
 }
 
+void onSimpleTableTest( Fl_Widget *pBtn, void * ) {
+    Fl_Window *pWin = new Fl_Window( 100, 100, 500, 500, "SIMPLETABLETEST" );
+    SimpleTable *pTbl = new SimpleTable( 5, 5, 490, 490 );
+    TableData *pData = new TableData();
+    pData->addColumn( "Spalte 0" );
+    pData->addColumn( "Spalte 1" );
+    pData->addColumn( "Spalte 2" );
+    pData->addColumn( "Spalte 3" );
+    for( int r = 0; r < 10; r++ ) {
+        pData->addRow();
+        for( int c = 0; c < 4; c++ ) {
+            CharBuffer buf;
+            buf.addInt( r );
+            buf.add( '/' );
+            buf.addInt( c );
+            pData->setValue( buf.get(), r, c );
+        }
+    }
+    pTbl->setTableData( pData );
+    pTbl->hideColumn( "Spalte 1" );
+//    pTbl->hideColumn( "Spalte 3" );
+//    pTbl->hideColumn( "Spalte 0" );
+    pTbl->hideColumn( "Spalte 2" );
+    
+    pTbl->row_header( 1 );
+    
+    pTbl->setAlternatingRowColor();
+    
+    pWin->end();
+    pWin->show();
+}
+
 void onOpenDialog( Fl_Widget*pBtn, void * ) {
     Fl_Double_Window *pWin = new Fl_Double_Window( pBtn->x() + 25, pBtn->y() + pBtn->h() + 25, 300, 300 );
     pWin->end();
@@ -65,6 +99,8 @@ int main( ) {
     Fl_Button btn( 10, 10, 90, 25, "..." );
     btn.callback( onOpenCalendar, win );
     
+    Fl_Button btn2( 10, 50, 90, 25, "SimpleTest" );
+    btn2.callback( onSimpleTableTest );
     
     win->show( );
 

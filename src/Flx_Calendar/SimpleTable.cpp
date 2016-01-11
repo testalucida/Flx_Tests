@@ -16,6 +16,11 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
 , _cellFontsize( 12 ) 
 , _selMode( SELECTIONMODE_CELL_SINGLE )
 , _enableDragging( true )
+, _isAlternatingColumnColor( false )
+, _isAlternatingRowColor( false )
+, _backgroundColor ( FL_WHITE )
+, _alternatingColumnColor( FL_WHITE )
+, _alternatingRowColor( FL_WHITE )
 {
     // box( FL_FLAT_BOX );
     // color( fl_lighter( FL_LIGHT2 ) );
@@ -37,6 +42,12 @@ void SimpleTable::setTableData( my::TableData *pDataTable ) {
     _pData = pDataTable;
     rows( _pData->getRowCount( ) );
     cols( _pData->getColumnCount( ) );
+    
+    for( int c = 0, cmax = pDataTable->getColumnCount(); c < cmax; c++ ) {
+        IndexRel rel;
+        rel.viewIdx = rel.modelIdx = c;
+        _indexRelations.push_back( rel );
+    }
     redraw( );
 }
 
@@ -73,11 +84,25 @@ bool SimpleTable::isNothingSelected( ) {
 }
 
 void SimpleTable::hideColumn( const char *pColName ) {
-    //index der Spalte ermitteln...
-    int idx = _pData->getColumnIndex( pColName );
-    //...und merken:
-    //_hiddenColumns.push_back( idx );
-    //...und Anzahl der Spalten verringern:
+    //Model-Index der Spalte ermitteln...
+    int modelIdx = _pData->getColumnIndex( pColName );
+          //Element des Index-Relations-Vectors holen:
+    
+    _tmp.clear();
+    int viewIndex = 0;
+    for_each( _indexRelations.begin(), _indexRelations.end(), 
+              [&]( IndexRel &ixrelAlt ) 
+    {
+        if( ixrelAlt.modelIdx != modelIdx ) {
+            IndexRel ixrelNeu;
+            ixrelNeu.viewIdx = viewIndex++;
+            ixrelNeu.modelIdx = ixrelAlt.modelIdx;
+            _tmp.push_back( ixrelNeu );
+        }
+    } );
+    
+    _indexRelations = _tmp;
+    
     cols( cols( ) - 1 );
 }
 
@@ -97,7 +122,8 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
             fl_line( X - 1, Y, X - 1, Y + H - 1, X + W, Y + H - 1 );
             if( _pData ) {
                 fl_color( FL_BLACK );
-                fl_draw( _pData->getColumnHeader( C ), X, Y, W, H, FL_ALIGN_CENTER );
+                fl_draw( _pData->getColumnHeader( getModelIndex( C ) ), 
+                         X, Y, W, H, FL_ALIGN_CENTER );
             }
         }
             fl_pop_clip( );
@@ -121,12 +147,14 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
         { // table wants us to draw a cell
             fl_push_clip( X - 1, Y - 1, W, H );
             // Background
-            fl_draw_box( FL_THIN_UP_BOX, X - 1, Y - 1, W + 2, H + 2, getCellBackground( R, C, is_selected( R, C ) ) );
+            fl_draw_box( FL_THIN_UP_BOX, X - 1, Y - 1, W + 2, H + 2, 
+                         getCellBackground( R, C, is_selected( R, C ) ) );
             {
                 if( _pData ) {
                     fl_color( FL_BLACK );
                     fl_font( FL_HELVETICA, _cellFontsize ); // ..in regular font
-                    fl_draw( _pData->getValue( R, C ), X + 3, Y + 3, W - 6, H - 6, FL_ALIGN_RIGHT );
+                    fl_draw( _pData->getValue( R,  getModelIndex( C ) ), 
+                             X + 3, Y + 3, W - 6, H - 6, FL_ALIGN_RIGHT );
                 }
             }
             fl_pop_clip( );
@@ -201,5 +229,39 @@ void SimpleTable::adjustSelection( TableContext context, int r, int c ) {
 }
 
 Fl_Color SimpleTable::getCellBackground( int row, int col, bool isSelected ) const {
-    return isSelected ? FL_YELLOW : FL_WHITE;
+    if( isSelected ) return FL_YELLOW;
+    
+    Fl_Color backColor = _backgroundColor;
+    
+    if( _isAlternatingColumnColor || _isAlternatingRowColor ) {        
+        if( _isAlternatingColumnColor ) {
+            int rem = col % 2;
+            if( rem != 0 ) backColor = _alternatingColumnColor;
+        }
+        if( _isAlternatingRowColor ) {
+            int rem = row % 2;
+            if( rem != 0 ) backColor = _alternatingRowColor;
+        }
+    }
+    return backColor;
+}
+
+int SimpleTable::getModelIndex( int viewIndex ) const {
+    for( auto itr = _indexRelations.begin(); itr != _indexRelations.end(); itr++ ) {
+        const IndexRel &ixRel = *itr; 
+        if( ixRel.viewIdx == viewIndex ) {
+            return ixRel.modelIdx;
+        }
+    }
+    return -1;
+}
+
+void SimpleTable::setAlternatingColumnColor( Fl_Color color ) {
+    _alternatingColumnColor = color;
+    _isAlternatingColumnColor = color == _backgroundColor ? false : true;
+}
+
+void SimpleTable::setAlternatingRowColor( Fl_Color color ) {
+    _alternatingRowColor = color;
+    _isAlternatingRowColor = color == _backgroundColor ? false : true;
 }
