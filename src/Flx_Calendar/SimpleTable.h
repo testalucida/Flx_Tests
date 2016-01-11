@@ -37,6 +37,10 @@ public:
     int getModelIndex( int viewIndex ) const;
     void setAlternatingColumnColor( Fl_Color color = fl_lighter( fl_rgb_color( 242, 234, 255 ) ) );    
     void setAlternatingRowColor( Fl_Color color = fl_lighter( fl_rgb_color( 242, 234, 255 ) ) );
+    int getVScrollbarWidth() const;
+    int getAllColumnsWidth();
+    bool isVScrollbarVisible() const;
+    void hideVScrollbar( bool hide );
     virtual ~SimpleTable() {};
 protected:
     virtual void draw_cell( TableContext context, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0 );
@@ -60,6 +64,7 @@ private:
     Fl_Color _backgroundColor;
     Fl_Color _alternatingColumnColor;
     Fl_Color _alternatingRowColor;
+    bool _hideVScrollbar;
 };
 
 #endif /* FLX_SPREADSHEET_H */

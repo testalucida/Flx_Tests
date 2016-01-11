@@ -21,6 +21,7 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
 , _backgroundColor ( FL_WHITE )
 , _alternatingColumnColor( FL_WHITE )
 , _alternatingRowColor( FL_WHITE )
+, _hideVScrollbar( false )
 {
     // box( FL_FLAT_BOX );
     // color( fl_lighter( FL_LIGHT2 ) );
@@ -161,6 +162,9 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
             return;
         }
         case CONTEXT_RC_RESIZE: // table resizing rows or columns
+            if( _hideVScrollbar ) {
+                vscrollbar->hide(); 
+            }
             return;
         default:
             return;
@@ -264,4 +268,27 @@ void SimpleTable::setAlternatingColumnColor( Fl_Color color ) {
 void SimpleTable::setAlternatingRowColor( Fl_Color color ) {
     _alternatingRowColor = color;
     _isAlternatingRowColor = color == _backgroundColor ? false : true;
+}
+
+int SimpleTable::getVScrollbarWidth() const {
+    return vscrollbar->visible() ? vscrollbar->w() : 0;
+}
+
+int SimpleTable::getAllColumnsWidth() {
+    int w = row_header() ? row_header_width() : 0;
+    for( int c = 0, cmax = cols(); c < cmax; c++ ) {
+        w += col_width( c );
+    }
+    return w;
+}
+
+bool SimpleTable::isVScrollbarVisible() const {
+    return vscrollbar->visible();
+}
+
+void SimpleTable::hideVScrollbar( bool hide ) {
+    _hideVScrollbar = hide;
+    table_resized();
+    
+    parent()->redraw();
 }

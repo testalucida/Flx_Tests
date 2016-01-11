@@ -80,7 +80,64 @@ void onSimpleTableTest( Fl_Widget *pBtn, void * ) {
     pTbl->setAlternatingRowColor();
     
     pWin->end();
+    
     pWin->show();
+
+}
+
+void onFrozenTable( Fl_Widget *pBtn, void * ) {
+    Fl_Double_Window *pWin = new Fl_Double_Window( 100, 100, 500, 500, "2 SimpleTables" );
+   
+    TableData *pData = new TableData();
+    pData->addColumn( "Spalte 0" );
+    pData->addColumn( "Spalte 1" );
+    pData->addColumn( "Spalte 2" );
+    pData->addColumn( "Spalte 3" );
+    for( int r = 0; r < 50; r++ ) {
+        pData->addRow();
+        for( int c = 0; c < 4; c++ ) {
+            CharBuffer buf;
+            buf.addInt( r );
+            buf.add( '/' );
+            buf.addInt( c );
+            pData->setValue( buf.get(), r, c );
+        }
+    }
+    
+    SimpleTable *pLeft = new SimpleTable( 5, 5, 200, 490 );
+    pLeft->setTableData( pData );
+    pLeft->hideColumn( "Spalte 1" );
+    pLeft->hideColumn( "Spalte 2" );
+    pLeft->row_header( 1 );
+    pLeft->setAlternatingRowColor();
+    
+    int W = pLeft->getAllColumnsWidth();
+    if( pLeft->isVScrollbarVisible() ) {
+        W += Fl::scrollbar_size();
+    }
+    pLeft->size( W, pLeft->h() );
+    
+    int x2 = pLeft->x() + pLeft->w();
+    if( pLeft->isVScrollbarVisible() ) {
+        x2 -= Fl::scrollbar_size();
+    }
+    SimpleTable *pRight = 
+            new SimpleTable( x2, 5, 
+                             pWin->w() - pLeft->x() - pLeft->w() - 5, pLeft->h() );
+    pRight->setTableData( pData );
+    pRight->row_header( 0 );
+    pRight->hideColumn( "Spalte 0" );
+    pRight->hideColumn( "Spalte 3" );
+    pRight->setAlternatingRowColor();
+    
+    pLeft->hideVScrollbar( true );
+    
+    pWin->end();
+    
+    pWin->show();
+    
+    
+
 }
 
 void onOpenDialog( Fl_Widget*pBtn, void * ) {
@@ -96,11 +153,14 @@ void onOpenDialog( Fl_Widget*pBtn, void * ) {
 int main( ) {
     Fl_Double_Window *win = new Fl_Double_Window( 100, 50, 1050, 800, "Flx Tests" );
  
-    Fl_Button btn( 10, 10, 90, 25, "..." );
+    Fl_Button btn( 10, 10, 100, 25, "Calendar" );
     btn.callback( onOpenCalendar, win );
     
-    Fl_Button btn2( 10, 50, 90, 25, "SimpleTest" );
+    Fl_Button btn2( 10, 50, 100, 25, "SimpleTable" );
     btn2.callback( onSimpleTableTest );
+    
+    Fl_Button btn3( 10, 90, 100, 25, "2 Tables" );
+    btn3.callback( onFrozenTable );
     
     win->show( );
 
