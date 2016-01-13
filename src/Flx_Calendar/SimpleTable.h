@@ -9,6 +9,7 @@
 #define SIMPLE_TABLE_H
 
 #include <FL/Fl_Table_Row.H>
+#include <FL/Fl_Table.H>
 #include <FL/Fl_Input.H>
 #include <my/TableData.h>
 
@@ -24,6 +25,7 @@ enum SelectionMode {
 };
 
 typedef void (*ScrollCallback) (char orientiation, int scrollvalue, void * );
+typedef void (*SelectionCallback) (Fl_Table::TableContext, int r1, int c1, int r2, int c2, void * );
 
 class SimpleTable : public Fl_Table_Row {
 public:
@@ -45,18 +47,20 @@ public:
     void hideVScrollbar( bool hide );
     void setScrollCallback( ScrollCallback, void * );
     void setScrollValue( char orientation, int newValue );
-    static void event_callback( Fl_Widget*, void *v ) { // table's event callback (static)
-        ( (SimpleTable*) v )->event_callback2( );
-    }
+    void setSelectionCallback( SelectionCallback, void * );
+//    static void event_callback( Fl_Widget*, void *v ) { // table's event callback (static)
+//        ( (SimpleTable*) v )->event_callback2( );
+//    }
     virtual ~SimpleTable() {};
 protected:
     virtual void draw_cell( TableContext context, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0 );
-    void event_callback2( ); // table's event callback (instance)
+//    void event_callback2( ); // table's event callback (instance)
    
 private:
-    void adjustSelection( TableContext, int, int );
+//    void adjustSelection( TableContext, int, int );
     static void onScrollStatic( Fl_Widget *, void * );
     void onScroll( Fl_Scrollbar * );
+    void doSelectionCallback( Fl_Table::TableContext );
 private:
     my::TableData *_pData;
     Fl_Fontsize _headerFontsize;
@@ -73,6 +77,8 @@ private:
     bool _hideVScrollbar;
     ScrollCallback _scrollCallback;
     void *_pScrollUserData;
+    SelectionCallback _selectionCallback;
+    void *_pSelectionUserData;
 };
 
 #endif /* FLX_SPREADSHEET_H */

@@ -24,6 +24,8 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
 , _hideVScrollbar( false )
 , _scrollCallback( NULL )
 , _pScrollUserData( NULL )
+, _selectionCallback( NULL )
+, _pSelectionUserData( NULL )
 {
     // box( FL_FLAT_BOX );
     // color( fl_lighter( FL_LIGHT2 ) );
@@ -34,8 +36,8 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
     col_resize( 1 );
     row_header_color( FL_LIGHT1 | FL_GRAY );
     col_header_color( FL_LIGHT1 | FL_GRAY );
-    callback( &event_callback, (void*) this );
-    when( FL_WHEN_NOT_CHANGED |  when( ) );
+//    callback( &event_callback, (void*) this );
+//    when( FL_WHEN_NOT_CHANGED |  when( ) );
     end( );
     set_selection( 0, 0, 0, 0 );
     
@@ -60,12 +62,18 @@ int SimpleTable::handle( int evt ) {
     int r, c;
     ResizeFlag resizeFlag;
     TableContext context = cursor2rowcol( r, c, resizeFlag );
+    
     switch( evt ) {
         case FL_PUSH:
             if( Fl::focus( ) != this ) {
                 Fl::focus( this );
             }
+            fprintf( stderr, "click in %d, %d\n", r, c );
             if( !canSelectCell( r, c ) ) {
+                return 1;
+            } else {
+                Fl_Table::handle( evt );
+                doSelectionCallback( context );
                 return 1;
             }
             break;
@@ -73,10 +81,9 @@ int SimpleTable::handle( int evt ) {
             if( !_enableDragging ) {
                 return 1;
             } else {
-                int r1, c1, r2, c2;
-                get_selection( r1, c1, r2, c2 );
-                fprintf( stderr, "DRAGGING - selection = %d, %d, %d, %d\n",
-                         r1, c1, r2, c2 );
+                Fl_Table::handle( evt );
+                doSelectionCallback( context );
+                return 1;
             }
             break;
         default:
@@ -180,66 +187,66 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
 }
 
 /** Callback whenever someone clicks on different parts of the table */
-void SimpleTable::event_callback2( ) {
-    int R = callback_row( );
-    int C = callback_col( );
-    fprintf( stderr, "SimpleTable::event_callback2: R = %d, C = %d\n", R, C );
-    TableContext context = callback_context( );
-    //adjustSelection( context, R, C );
-//    switch( context ) {
-//        case CONTEXT_ROW_HEADER:
-//            if( isNothingSelected( ) ) {
-//                set_selection( R, 1, R, 1 );
-//                redraw( );
-//            }
-//            break;
-//        case CONTEXT_COL_HEADER:
-//            break;
-//        case CONTEXT_CELL:
-//        { // A table event occurred on a cell
-//            switch( Fl::event( ) ) { // see what FLTK event caused it
-//                case FL_PUSH: // mouse click?
-//                    adjustSelection( context, R, C );
-//                    return;
-//                case FL_KEYBOARD: // key press in table?
-//                    return;
-//            }
-//            return;
-//        }
-//        case CONTEXT_TABLE: // A table event occurred on dead zone in table
-//           return;
-//        default:
-//            return;
-//    }
-}
+//void SimpleTable::event_callback2( ) {
+//    int R = callback_row( );
+//    int C = callback_col( );
+//    fprintf( stderr, "SimpleTable::event_callback2: R = %d, C = %d\n", R, C );
+//    TableContext context = callback_context( );
+//    //adjustSelection( context, R, C );
+////    switch( context ) {
+////        case CONTEXT_ROW_HEADER:
+////            if( isNothingSelected( ) ) {
+////                set_selection( R, 1, R, 1 );
+////                redraw( );
+////            }
+////            break;
+////        case CONTEXT_COL_HEADER:
+////            break;
+////        case CONTEXT_CELL:
+////        { // A table event occurred on a cell
+////            switch( Fl::event( ) ) { // see what FLTK event caused it
+////                case FL_PUSH: // mouse click?
+////                    adjustSelection( context, R, C );
+////                    return;
+////                case FL_KEYBOARD: // key press in table?
+////                    return;
+////            }
+////            return;
+////        }
+////        case CONTEXT_TABLE: // A table event occurred on dead zone in table
+////           return;
+////        default:
+////            return;
+////    }
+//}
 
-void SimpleTable::adjustSelection( TableContext context, int r, int c ) {
-    switch( context ) {
-        case CONTEXT_CELL:
-            switch ( _selMode ) {
-                case SELECTIONMODE_CELL_SINGLE:
-                    int x1, y1, x2, y2;
-                    get_selection( x1, y1, x2, y2 );
-                    fprintf( stderr, "selected before: %d, %d, %d, %d\n", x1, y1, x2, y2 );
-                    set_selection( r, c, r, c );
-                    fprintf( stderr, "selected after: %d, %d, %d, %d\n", x1, y1, x2, y2 );
-                    redraw();
-                    break;
-                case SELECTIONMODE_CELL_MULTI:
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case CONTEXT_ROW_HEADER:
-        case CONTEXT_COL_HEADER:
-        case CONTEXT_TABLE:
-            //TODO
-            break;
-        default:
-            break;
-    }
-}
+//void SimpleTable::adjustSelection( TableContext context, int r, int c ) {
+//    switch( context ) {
+//        case CONTEXT_CELL:
+//            switch ( _selMode ) {
+//                case SELECTIONMODE_CELL_SINGLE:
+//                    int x1, y1, x2, y2;
+//                    get_selection( x1, y1, x2, y2 );
+//                    fprintf( stderr, "selected before: %d, %d, %d, %d\n", x1, y1, x2, y2 );
+//                    set_selection( r, c, r, c );
+//                    fprintf( stderr, "selected after: %d, %d, %d, %d\n", x1, y1, x2, y2 );
+//                    redraw();
+//                    break;
+//                case SELECTIONMODE_CELL_MULTI:
+//                    break;
+//                default:
+//                    break;
+//            }
+//            break;
+//        case CONTEXT_ROW_HEADER:
+//        case CONTEXT_COL_HEADER:
+//        case CONTEXT_TABLE:
+//            //TODO
+//            break;
+//        default:
+//            break;
+//    }
+//}
 
 void SimpleTable::onScrollStatic( Fl_Widget *w, void *u ) {
     Fl_Table::scroll_cb( w, u );
@@ -252,6 +259,15 @@ void SimpleTable::onScroll( Fl_Scrollbar *pScroll ) {
         int val = pScroll->value();
         (*_scrollCallback)( c, val, _pScrollUserData );
     }
+}
+
+void SimpleTable::doSelectionCallback( TableContext context ) {
+    if( _selectionCallback ) {
+        int r1, c1, r2, c2;
+        get_selection( r1, c1, r2, c2 );
+        (*_selectionCallback) ( context, r1, c1, r2, c2, _pSelectionUserData );
+    }
+    
 }
 
 Fl_Color SimpleTable::getCellBackground( int row, int col, bool isSelected ) const {
@@ -327,4 +343,9 @@ void SimpleTable::setScrollValue( char orientation, int newValue ) {
         hscrollbar->value( newValue );
     }
     table_scrolled();
+}
+
+void SimpleTable::setSelectionCallback( SelectionCallback cb, void *pUserData ) {
+    _selectionCallback = cb;
+    _pSelectionUserData = pUserData;
 }

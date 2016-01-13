@@ -93,20 +93,19 @@ void onRightTableScroll( char c, int scrollVal, void *pUserData ) {
     pLeftTable->redraw();
 }
 
-void onTableSelection( Fl_Widget *pW, void *pUserData ) {
-    SimpleTable *pTrigger = ((SimpleTable*)pW);
-    SimpleTable::event_callback( pW, pUserData );
-    
-    Fl_Table::TableContext ctxt = pTrigger->callback_context();
-    SimpleTable *pOther = ((SimpleTable*)pUserData);
-    
-    if( ctxt == Fl_Table::CONTEXT_ROW_HEADER ) {
-        int r1, c1, r2, c2;
-        pTrigger->get_selection( r1, c1, r2, c2 );
-        pOther->set_selection( r1, 0, r2, pOther->cols() - 1 );
+
+void onLeftSelection( Fl_Table::TableContext context, int r1, int c1, int r2, int c2, void *pUserData ) {
+    SimpleTable *pRight = (SimpleTable*)pUserData;
+    if( context == Fl_Table::CONTEXT_ROW_HEADER ) {
+        pRight->set_selection( r1, 0, r2, pRight->cols() - 1 );
     } else {
-        pOther->set_selection( -1, -1, -1, -1 );
+        pRight->set_selection( -1, -1, -1, -1 );
     }
+}
+
+void onRightSelection( Fl_Table::TableContext context, int r1, int c1, int r2, int c2, void *pUserData ) {
+    SimpleTable *pLeft = (SimpleTable*)pUserData;
+    pLeft->set_selection( -1, -1, -1, -1 );
 }
 
 void onFrozenTable( Fl_Widget *pBtn, void * ) {
@@ -154,10 +153,9 @@ void onFrozenTable( Fl_Widget *pBtn, void * ) {
     pRight->hideColumn( "Spalte 3" );
     pRight->setAlternatingRowColor();
     pRight->setScrollCallback( onRightTableScroll, pLeft );
-    
-    pLeft->callback( onTableSelection, pRight );
-    pRight->callback( onTableSelection, pLeft );
-    
+
+    pLeft->setSelectionCallback( onLeftSelection, pRight );
+    pRight->setSelectionCallback( onRightSelection, pLeft );
     pLeft->hideVScrollbar( true );
     
     pWin->end();
