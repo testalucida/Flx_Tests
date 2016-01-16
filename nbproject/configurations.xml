@@ -5,23 +5,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="src" displayName="src" projectFiles="true">
-        <logicalFolder name="Flx_Calendar"
-                       displayName="Flx_Calendar"
-                       projectFiles="true">
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.h</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.h</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.h</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.h</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.h</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.h</itemPath>
-          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/strings.h</itemPath>
-        </logicalFolder>
         <itemPath>src/main.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -54,6 +37,8 @@
           <incDir>
             <pElem>../../fltk-1.3.3</pElem>
             <pElem>../../My_1_5</pElem>
+            <pElem>/home/max/cpp/fltk/SimpleTable</pElem>
+            <pElem>/home/max/cpp/fltk/Calendar</pElem>
             <pElem>.</pElem>
             <pElem>/home/max/cpp/fltk/Flx_Tests/src</pElem>
             <pElem>/usr/include/mysql</pElem>
@@ -69,6 +54,8 @@
             <pElem>../../fltk-1.3.3/lib</pElem>
             <pElem>/usr/local/lib</pElem>
             <pElem>/usr/lib</pElem>
+            <pElem>/home/max/cpp/fltk/SimpleTable/lib/debug</pElem>
+            <pElem>/home/max/cpp/fltk/Calendar/lib/debug</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>my_1_5</linkerLibLibItem>
@@ -76,75 +63,24 @@
             <linkerLibLibItem>fltk_images</linkerLibLibItem>
             <linkerLibLibItem>fltk_jpeg</linkerLibLibItem>
             <linkerLibLibItem>fltk_png</linkerLibLibItem>
+            <linkerLibLibItem>simpletable</linkerLibLibItem>
+            <linkerLibLibItem>calendar</linkerLibLibItem>
           </linkerLibItems>
           <commandLine>`fltk-config --use-images --ldstaticflags` `mysql_config --libs`</commandLine>
         </linkerTool>
+        <requiredProjects>
+          <makeArtifact PL="/home/max/cpp/fltk/SimpleTable"
+                        CT="3"
+                        CN="Debug"
+                        AC="true"
+                        BL="true"
+                        WD="/home/max/cpp/fltk/SimpleTable"
+                        BC="${MAKE}  -f Makefile CONF=Debug"
+                        CC="${MAKE}  -f Makefile CONF=Debug clean"
+                        OP="lib/debug/libsimpletable.a">
+          </makeArtifact>
+        </requiredProjects>
       </compileType>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/strings.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -168,71 +104,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/strings.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>

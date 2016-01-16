@@ -6,9 +6,11 @@
             <name>Flx_Tests</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
-            <header-extensions>h</header-extensions>
+            <header-extensions/>
             <sourceEncoding>UTF-8</sourceEncoding>
-            <make-dep-projects/>
+            <make-dep-projects>
+                <make-dep-project>/home/max/cpp/fltk/SimpleTable</make-dep-project>
+            </make-dep-projects>
             <sourceRootList>
                 <sourceRootElem>src</sourceRootElem>
             </sourceRootList>

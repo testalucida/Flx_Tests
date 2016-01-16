@@ -35,12 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o \
-	${OBJECTDIR}/_ext/2a7bc4b/DayTable.o \
-	${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o \
-	${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o \
-	${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o \
-	${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o \
 	${OBJECTDIR}/src/main.o
 
 
@@ -58,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../My_1_5/lib/Debug -L../../fltk-1.3.3/lib -L/usr/local/lib -L/usr/lib -lmy_1_5 -lfltk_forms -lfltk_images -lfltk_jpeg -lfltk_png
+LDLIBSOPTIONS=-L../../My_1_5/lib/Debug -L../../fltk-1.3.3/lib -L/usr/local/lib -L/usr/lib -L/home/max/cpp/fltk/SimpleTable/lib/debug -L/home/max/cpp/fltk/Calendar/lib/debug -lmy_1_5 -lfltk_forms -lfltk_images -lfltk_jpeg -lfltk_png -lsimpletable -lcalendar
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -68,43 +62,14 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/flx_tests: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/flx_tests ${OBJECTFILES} ${LDLIBSOPTIONS} `fltk-config --use-images --ldstaticflags` `mysql_config --libs`
 
-${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/DayTable.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/DayTable.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp
-
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.cpp
+	$(COMPILE.cc) -g -D_TEST_ -I../../fltk-1.3.3 -I../../My_1_5 -I/home/max/cpp/fltk/SimpleTable -I/home/max/cpp/fltk/Calendar -I. -I/home/max/cpp/fltk/Flx_Tests/src -I/usr/include/mysql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.cpp
 
 # Subprojects
 .build-subprojects:
+	cd /home/max/cpp/fltk/SimpleTable && ${MAKE}  -f Makefile CONF=Debug
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -113,6 +78,7 @@ ${OBJECTDIR}/src/main.o: src/main.cpp
 
 # Subprojects
 .clean-subprojects:
+	cd /home/max/cpp/fltk/SimpleTable && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

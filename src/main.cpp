@@ -13,13 +13,15 @@
 //#include <FL/Fl_Table.H>
 #include <FL/Fl_Tile.H>
 
-#include <Flx_Calendar/Flx_Calendar.h>
-#include <Flx_Calendar/SimpleTable.h>
-#include <Flx_Calendar/Fl_Table_Copy.h>
+#include <Flx_Calendar.h>
+#include <SimpleTable.h>
+#include <Fl_Table_Copy.h>
 
 #include <my/TableData.h>
 #include <my/CharBuffer.h>
 #include <my/datetime.h>
+
+#include <TwoTables.h>
 
 using namespace my;
 
@@ -151,47 +153,46 @@ void on2Tables( Fl_Widget *pBtn, void * ) {
         }
     }
     
-    Fl_Tile *pTile = new Fl_Tile( 5, 5, 490, 490 );
-    SimpleTable *pLeft = new SimpleTable( pTile->x(), pTile->y(), 200, 490 );
-    pLeft->setTableData( pData );
-    pLeft->hideColumn( "Spalte 1" );
-    pLeft->hideColumn( "Spalte 2" );
-    pLeft->row_header( 1 );
-    pLeft->setAlternatingRowColor();
+    TwoTables *pTbls = new TwoTables( 5, 5, 490, 490 );
+    pTbls->setTableData( pData );
     
-    int W = pLeft->getAllColumnsWidth();
-    if( pLeft->isVScrollbarVisible() ) {
-        W += Fl::scrollbar_size();
-    }
-    pLeft->size( W, pLeft->h() );
-    
-    pLeft->showVScrollbar( false );
-    pLeft->makeColumnsFit();
-    
-//    int x2 = pLeft->x() + pLeft->w();
-//    if( pLeft->isVScrollbarVisible() ) {
-//        x2 -= Fl::scrollbar_size();
-//    }
-    SimpleTable *pRight = 
-            new SimpleTable( pLeft->x() + pLeft->w(), pLeft->y(),
-                             280, pLeft->h() );
-    pRight->setTableData( pData );
-    pRight->row_header( 0 );
-    pRight->hideColumn( "Spalte 0" );
-    pRight->hideColumn( "Spalte 3" );
-    pRight->setAlternatingRowColor();
-    pRight->setScrollCallback( onRightTableScroll, pLeft );
-    
-    pTile->end();
-
-    pLeft->setSelectionCallback( onLeftSelection, pRight );
-    pRight->setSelectionCallback( onRightSelection, pLeft );
-  
-    pLeft->setResizeCallback( onLeftResize, pLeft );
-    
-    pLeft->set_selection( 0, 0, 0, 0 );
+//    Fl_Tile *pTile = new Fl_Tile( 5, 5, 490, 490 );
+//    SimpleTable *pLeft = new SimpleTable( pTile->x(), pTile->y(), 200, 490 );
+//    pLeft->setTableData( pData );
+////    pLeft->hideColumn( "Spalte 1" );
+////    pLeft->hideColumn( "Spalte 2" );
+//    pLeft->row_header( 1 );
+//    pLeft->setAlternatingRowColor();
+//    
+//    pLeft->showVScrollbar( false );
+//    pLeft->makeColumnsFit();
+// 
+//    SimpleTable *pRight = 
+//            new SimpleTable( pLeft->x() + pLeft->w(), pLeft->y(),
+//                             285, pLeft->h() );
+//    pRight->setTableData( pData );
+//    pRight->row_header( 0 );
+////    pRight->hideColumn( "Spalte 0" );
+////    pRight->hideColumn( "Spalte 3" );
+//    pRight->setAlternatingRowColor();
+//    pRight->setScrollCallback( onRightTableScroll, pLeft );
+//    
+//    pTile->end();
+//
+//    pLeft->setSelectionCallback( onLeftSelection, pRight );
+//    pRight->setSelectionCallback( onRightSelection, pLeft );
+//  
+//    pLeft->setResizeCallback( onLeftResize, pLeft );
+//    
+//    pLeft->set_selection( 0, 0, 0, 0 );
     
     pWin->end();
+    pWin->resizable( pTbls );
+    
+//    fprintf( stderr, "left: %d, %d, %d, %d\n", 
+//                     pLeft->x(), pLeft->y(), pLeft->w(), pLeft->h() );
+//    fprintf( stderr, "rght: %d, %d, %d, %d\n", 
+//                     pRight->x(), pRight->y(), pRight->w(), pRight->h() );
     
     pWin->show();
 

@@ -35,12 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o \
-	${OBJECTDIR}/_ext/2a7bc4b/DayTable.o \
-	${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o \
-	${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o \
-	${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o \
-	${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o \
 	${OBJECTDIR}/src/main.o
 
 
@@ -67,36 +61,6 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/flx_tests: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/flx_tests ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/CalendarController.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/DayTable.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/DayTable.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp
-
-${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
