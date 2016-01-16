@@ -14,6 +14,8 @@
           <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.h</itemPath>
           <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp</itemPath>
           <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.h</itemPath>
+          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp</itemPath>
+          <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.h</itemPath>
           <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp</itemPath>
           <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.h</itemPath>
           <itemPath>/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp</itemPath>
@@ -108,6 +110,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp"
             ex="false"
             tool="1"
@@ -182,6 +194,16 @@
             flavor2="0">
       </item>
       <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.h"
             ex="false"
             tool="3"
             flavor2="0">

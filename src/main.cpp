@@ -10,10 +10,12 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Printer.H>
 #include <FL/Fl_Browser.H>
-#include <FL/Fl_Table.H>
+//#include <FL/Fl_Table.H>
+#include <FL/Fl_Tile.H>
 
 #include <Flx_Calendar/Flx_Calendar.h>
 #include <Flx_Calendar/SimpleTable.h>
+#include <Flx_Calendar/Fl_Table_Copy.h>
 
 #include <my/TableData.h>
 #include <my/CharBuffer.h>
@@ -45,8 +47,6 @@ void onPrint( Fl_Widget *, void *pUserdata ) {
 void onOpenCalendar( Fl_Widget *pBtn, void *pWin ) {
     Flx_Calendar *pCal = new Flx_Calendar();
     pCal->setDate( MyDate( 4, 5, 2016 ));
-    //pCal->show( pBtn->x() + 25, pBtn->y() + pBtn->h() + 25);
-    //((Fl_Double_Window*)pWin)->add( pCal );
     MyDate dt = pCal->show( pBtn->x() + 25, pBtn->y() + pBtn->h() + 25 );
     fprintf( stderr, "selected: %s\n", dt.ToIsoString().c_str() );
     delete pCal;
@@ -60,7 +60,7 @@ void onSimpleTableTest( Fl_Widget *pBtn, void * ) {
     pData->addColumn( "Spalte 1" );
     pData->addColumn( "Spalte 2" );
     pData->addColumn( "Spalte 3" );
-    for( int r = 0; r < 10; r++ ) {
+    for( int r = 0; r < 100; r++ ) {
         pData->addRow();
         for( int c = 0; c < 4; c++ ) {
             CharBuffer buf;
@@ -71,16 +71,17 @@ void onSimpleTableTest( Fl_Widget *pBtn, void * ) {
         }
     }
     pTbl->setTableData( pData );
-    pTbl->hideColumn( "Spalte 1" );
+    //pTbl->hideColumn( "Spalte 1" );
 //    pTbl->hideColumn( "Spalte 3" );
 //    pTbl->hideColumn( "Spalte 0" );
-    pTbl->hideColumn( "Spalte 2" );
+    //pTbl->hideColumn( "Spalte 2" );
     
     pTbl->row_header( 1 );
     
     pTbl->setAlternatingRowColor();
     
     pWin->end();
+    pWin->resizable( pTbl );
     
     pWin->show();
 
@@ -93,24 +94,47 @@ void onRightTableScroll( char c, int scrollVal, void *pUserData ) {
     pLeftTable->redraw();
 }
 
+void onLeftResize( int x, int y, int w, int h, void *pUserData ) {
+    SimpleTable *pLeft = (SimpleTable*)pUserData;
+    pLeft->makeColumnsFit();
+    //int acw = pLeft->getAllColumnsWidth() - pLeft->row_header_width();
+//    if( pLeft->isVScrollbarVisible() ) {
+//        acw -= pLeft->scrollbar_size();
+//    }
+//    if( acw < w ) {
+//        int cw = w / pLeft->cols();
+//        for( int c = 0, cmax = pLeft->cols(); c < (cmax-1); c++ ) {
+//            pLeft->col_width( c, cw );
+//            acw -= cw;
+//        }
+//        pLeft->col_width( pLeft->cols() - 1, acw );
+//        pLeft->redraw();
+//    }
+}
 
-void onLeftSelection( Fl_Table::TableContext context, int r1, int c1, int r2, int c2, void *pUserData ) {
+
+void onLeftSelection( Fl_Table_Copy::TableContext context, int r1, int c1, int r2, int c2, void *pUserData ) {
     SimpleTable *pRight = (SimpleTable*)pUserData;
-    if( context == Fl_Table::CONTEXT_ROW_HEADER ) {
+    if( context == Fl_Table_Copy::CONTEXT_ROW_HEADER ) {
         pRight->set_selection( r1, 0, r2, pRight->cols() - 1 );
     } else {
         pRight->set_selection( -1, -1, -1, -1 );
     }
 }
 
-void onRightSelection( Fl_Table::TableContext context, int r1, int c1, int r2, int c2, void *pUserData ) {
+void onRightSelection( Fl_Table_Copy::TableContext context, int r1, int c1, int r2, int c2, void *pUserData ) {
     SimpleTable *pLeft = (SimpleTable*)pUserData;
     pLeft->set_selection( -1, -1, -1, -1 );
 }
 
-void onFrozenTable( Fl_Widget *pBtn, void * ) {
-    Fl_Double_Window *pWin = new Fl_Double_Window( 100, 100, 500, 500, "2 SimpleTables" );
-   
+void autowidth( Fl_Widget *, void *pUserData ) {
+    SimpleTable *pTbl = (SimpleTable*)pUserData;
+    pTbl->makeColumnsFit();
+}
+
+void on2Tables( Fl_Widget *pBtn, void * ) {
+    Fl_Double_Window *pWin = new Fl_Double_Window( 450, 100, 500, 500, "2 SimpleTables" );
+    
     TableData *pData = new TableData();
     pData->addColumn( "Spalte 0" );
     pData->addColumn( "Spalte 1" );
@@ -127,7 +151,8 @@ void onFrozenTable( Fl_Widget *pBtn, void * ) {
         }
     }
     
-    SimpleTable *pLeft = new SimpleTable( 5, 5, 200, 490 );
+    Fl_Tile *pTile = new Fl_Tile( 5, 5, 490, 490 );
+    SimpleTable *pLeft = new SimpleTable( pTile->x(), pTile->y(), 200, 490 );
     pLeft->setTableData( pData );
     pLeft->hideColumn( "Spalte 1" );
     pLeft->hideColumn( "Spalte 2" );
@@ -140,28 +165,71 @@ void onFrozenTable( Fl_Widget *pBtn, void * ) {
     }
     pLeft->size( W, pLeft->h() );
     
-    int x2 = pLeft->x() + pLeft->w();
-    if( pLeft->isVScrollbarVisible() ) {
-        x2 -= Fl::scrollbar_size();
-    }
+    pLeft->showVScrollbar( false );
+    pLeft->makeColumnsFit();
+    
+//    int x2 = pLeft->x() + pLeft->w();
+//    if( pLeft->isVScrollbarVisible() ) {
+//        x2 -= Fl::scrollbar_size();
+//    }
     SimpleTable *pRight = 
-            new SimpleTable( x2, 5, 
-                             pWin->w() - pLeft->x() - pLeft->w() - 5, pLeft->h() );
+            new SimpleTable( pLeft->x() + pLeft->w(), pLeft->y(),
+                             280, pLeft->h() );
     pRight->setTableData( pData );
     pRight->row_header( 0 );
     pRight->hideColumn( "Spalte 0" );
     pRight->hideColumn( "Spalte 3" );
     pRight->setAlternatingRowColor();
     pRight->setScrollCallback( onRightTableScroll, pLeft );
+    
+    pTile->end();
 
     pLeft->setSelectionCallback( onLeftSelection, pRight );
     pRight->setSelectionCallback( onRightSelection, pLeft );
-    pLeft->hideVScrollbar( true );
+  
+    pLeft->setResizeCallback( onLeftResize, pLeft );
+    
+    pLeft->set_selection( 0, 0, 0, 0 );
     
     pWin->end();
     
     pWin->show();
 
+}
+
+void onTestResizeSimpleTable( Fl_Widget *, void * ) {
+    Fl_Double_Window *pWin = new Fl_Double_Window( 100, 100, 500, 500, "Resizing" );
+    SimpleTable *pTbl = new SimpleTable( 5, 5, 490, 400 );
+    TableData *pData = new TableData();
+    pData->addColumn( "Spalte 0" );
+    pData->addColumn( "Spalte 1" );
+    pData->addColumn( "Spalte 2" );
+    pData->addColumn( "Spalte 3" );
+    for( int r = 0; r < 10; r++ ) {
+        pData->addRow();
+        for( int c = 0; c < 4; c++ ) {
+            CharBuffer buf;
+            buf.addInt( r );
+            buf.add( '/' );
+            buf.addInt( c );
+            pData->setValue( buf.get(), r, c );
+        }
+    }
+    pTbl->setTableData( pData );
+ 
+    pTbl->row_header( 1 );
+    
+    pTbl->setAlternatingRowColor();
+    
+    pTbl->hideColumn( "Spalte 2" );
+    
+    Fl_Button *pBtn = new Fl_Button( 10, 420, 90, 25, "Autowidth" );
+    pBtn->callback( autowidth, pTbl );
+    
+    pWin->end();
+    pWin->resizable( pTbl );
+    
+    pWin->show();
 }
 
 void onOpenDialog( Fl_Widget*pBtn, void * ) {
@@ -175,7 +243,9 @@ void onOpenDialog( Fl_Widget*pBtn, void * ) {
 }
 
 int main( ) {
-    Fl_Double_Window *win = new Fl_Double_Window( 100, 50, 1050, 800, "Flx Tests" );
+//    Fl::scheme( "gleam" );
+    Fl::scheme( "gtk+" );
+    Fl_Double_Window *win = new Fl_Double_Window( 1000, 50, 200, 200, "Flx Tests" );
  
     Fl_Button btn( 10, 10, 100, 25, "Calendar" );
     btn.callback( onOpenCalendar, win );
@@ -184,7 +254,10 @@ int main( ) {
     btn2.callback( onSimpleTableTest );
     
     Fl_Button btn3( 10, 90, 100, 25, "2 Tables" );
-    btn3.callback( onFrozenTable );
+    btn3.callback( on2Tables );
+    
+    Fl_Button btn4( 10, 130, 100, 25, "Resizing" );
+    btn4.callback( onTestResizeSimpleTable );
     
     win->show( );
 

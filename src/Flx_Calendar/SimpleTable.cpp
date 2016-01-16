@@ -11,7 +11,7 @@
 using namespace my;
 
 SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
-: Fl_Table_Row( X, Y, W, H, L )
+: Fl_Table_Copy( X, Y, W, H, L )
 , _headerFontsize( 12 )
 , _cellFontsize( 12 ) 
 , _selMode( SELECTIONMODE_CELL_SINGLE )
@@ -21,11 +21,12 @@ SimpleTable::SimpleTable( int X, int Y, int W, int H, const char* L )
 , _backgroundColor ( FL_WHITE )
 , _alternatingColumnColor( FL_WHITE )
 , _alternatingRowColor( FL_WHITE )
-, _hideVScrollbar( false )
 , _scrollCallback( NULL )
 , _pScrollUserData( NULL )
 , _selectionCallback( NULL )
 , _pSelectionUserData( NULL )
+, _resizeCallback( NULL )
+, _pResizeUserData( NULL )
 {
     // box( FL_FLAT_BOX );
     // color( fl_lighter( FL_LIGHT2 ) );
@@ -48,7 +49,7 @@ void SimpleTable::setTableData( my::TableData *pDataTable ) {
     _pData = pDataTable;
     rows( _pData->getRowCount( ) );
     cols( _pData->getColumnCount( ) );
-    
+    printf( "cols: %d\n", cols() );
     for( int c = 0, cmax = pDataTable->getColumnCount(); c < cmax; c++ ) {
         IndexRel rel;
         rel.viewIdx = rel.modelIdx = c;
@@ -58,7 +59,7 @@ void SimpleTable::setTableData( my::TableData *pDataTable ) {
 }
 
 int SimpleTable::handle( int evt ) {
-    //int rc = Fl_Table::handle( evt );
+    //int rc = Fl_Table_Copy::handle( evt );
     int r, c;
     ResizeFlag resizeFlag;
     TableContext context = cursor2rowcol( r, c, resizeFlag );
@@ -68,11 +69,11 @@ int SimpleTable::handle( int evt ) {
             if( Fl::focus( ) != this ) {
                 Fl::focus( this );
             }
-            fprintf( stderr, "click in %d, %d\n", r, c );
+//            fprintf( stderr, "click in %d, %d\n", r, c );
             if( !canSelectCell( r, c ) ) {
                 return 1;
             } else {
-                Fl_Table::handle( evt );
+                Fl_Table_Copy::handle( evt );
                 doSelectionCallback( context );
                 return 1;
             }
@@ -81,7 +82,7 @@ int SimpleTable::handle( int evt ) {
             if( !_enableDragging ) {
                 return 1;
             } else {
-                Fl_Table::handle( evt );
+                Fl_Table_Copy::handle( evt );
                 doSelectionCallback( context );
                 return 1;
             }
@@ -90,7 +91,7 @@ int SimpleTable::handle( int evt ) {
             break;
     }
     //return rc;
-    return Fl_Table::handle( evt );
+    return Fl_Table_Copy::handle( evt );
 }
 
 bool SimpleTable::isNothingSelected( ) {
@@ -177,9 +178,7 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
             return;
         }
         case CONTEXT_RC_RESIZE: // table resizing rows or columns
-            if( _hideVScrollbar ) {
-                vscrollbar->hide(); 
-            }
+           
             return;
         default:
             return;
@@ -249,7 +248,7 @@ void SimpleTable::draw_cell( TableContext context, int R, int C, int X, int Y, i
 //}
 
 void SimpleTable::onScrollStatic( Fl_Widget *w, void *u ) {
-    Fl_Table::scroll_cb( w, u );
+    Fl_Table_Copy::scroll_cb( w, u );
     ((SimpleTable*)u)->onScroll( (Fl_Scrollbar*)w );
 }
 
@@ -324,13 +323,6 @@ bool SimpleTable::isVScrollbarVisible() const {
     return vscrollbar->visible();
 }
 
-void SimpleTable::hideVScrollbar( bool hide ) {
-    _hideVScrollbar = hide;
-    table_resized();
-    
-    parent()->redraw();
-}
-
 void SimpleTable::setScrollCallback( ScrollCallback cb, void *userData ) {
     _scrollCallback = cb;
     _pScrollUserData = userData;
@@ -348,4 +340,29 @@ void SimpleTable::setScrollValue( char orientation, int newValue ) {
 void SimpleTable::setSelectionCallback( SelectionCallback cb, void *pUserData ) {
     _selectionCallback = cb;
     _pSelectionUserData = pUserData;
+}
+
+void SimpleTable::setResizeCallback( ResizeCallback cb, void *pUserData ) {
+    _resizeCallback = cb;
+    _pResizeUserData = pUserData;
+}
+
+void SimpleTable::resize(int x, int y, int w, int h) {
+    Fl_Table_Copy::resize( x, y, w, h );
+    if( _resizeCallback ) {
+        ( *_resizeCallback ) ( x, y, w, h, _pResizeUserData );
+    }
+}
+
+void SimpleTable::makeColumnsFit() {
+    int nCols = cols();
+    //int cw = ( w() - row_header_width() - 4 ) / nCols;
+    int cw = tiw / nCols;
+    int gw = 0;
+    for( int c = 0; c < (nCols - 1); c++ ) {
+        col_width( c, cw );
+        gw += cw;
+    }
+    col_width( nCols-1, tiw - gw);
+    redraw();
 }

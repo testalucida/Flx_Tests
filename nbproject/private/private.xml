@@ -10,6 +10,8 @@
         <group>
             <file>file:/home/max/cpp/fltk/Flx_Tests/src/main.cpp</file>
             <file>file:/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.h</file>
+            <file>file:/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp</file>
+            <file>file:/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTable.cpp</file>
             <file>file:/home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/SimpleTable.cpp</file>
         </group>
     </open-files>

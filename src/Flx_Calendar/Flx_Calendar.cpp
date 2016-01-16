@@ -22,8 +22,8 @@ static const int ROWHEIGHT = 20;
 static const int COLWIDTH = 20;
 static const int MARGIN = 2;
 static const int BAR_H = 25;
-static const int TABLE_H = 7*ROWHEIGHT;
-static const int TABLE_W = 7*COLWIDTH + 2*MARGIN;
+static const int TABLE_H = 7*ROWHEIGHT + 2*MARGIN;
+static const int TABLE_W = 7*COLWIDTH + 6; // + 2*MARGIN;
 static const int BUTTON_H = 20;
 static const int BUTTONGROUP_H = 24;
 	

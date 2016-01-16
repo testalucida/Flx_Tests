@@ -32,6 +32,11 @@ CalendarController::CalendarController( Fl_Choice &m, Fl_Choice &y, DayTable &tb
     _years.callback( comboCallbackStatic, this );
 
 	_dayTbl.setTableData( &_daysModel );
+    
+//    fprintf( stderr, "DayTable: w() = %d\n", _dayTbl.w() );
+//    for( int c = 0; c < _dayTbl.cols(); c++ ) {
+//        fprintf( stderr, "Col %d: width = %d\n", c, _dayTbl.col_width( c ) );
+//    }
 
 	MyDate today( true );
 	setDate( today );

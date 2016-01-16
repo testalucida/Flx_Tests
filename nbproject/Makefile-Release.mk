@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/2a7bc4b/CalendarController.o \
 	${OBJECTDIR}/_ext/2a7bc4b/DayTable.o \
 	${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o \
+	${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o \
 	${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o \
 	${OBJECTDIR}/_ext/2a7bc4b/SimpleTable.o \
 	${OBJECTDIR}/src/main.o
@@ -81,6 +82,11 @@ ${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_
 	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/DayTableModel.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/DayTableModel.cpp
+
+${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/2a7bc4b/Fl_Table_Copy.o /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Fl_Table_Copy.cpp
 
 ${OBJECTDIR}/_ext/2a7bc4b/Flx_Calendar.o: /home/max/cpp/fltk/Flx_Tests/src/Flx_Calendar/Flx_Calendar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/2a7bc4b
